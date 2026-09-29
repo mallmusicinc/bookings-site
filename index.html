@@ -19,18 +19,19 @@
   The booking form is the Agent C Apps Script web app (public deployment). Apps Script cannot
   serve a custom domain, so this page frames it; doGet sets XFrameOptionsMode.ALLOWALL.
   The path (or ?artist=) names the artist; see the script below.
-  The k token is the same one every booking link already carries; the form keeps its password.
+  The app mints the link tokens; the portal and the form keep their passwords.
 -->
 <iframe id="app" title="Booking request form" allow="clipboard-read; clipboard-write"
-  src="https://script.google.com/macros/s/AKfycbyTUlWj4h4FTWj-pETwEYWWN9O5DXg2nvfZ3KRC4IcPMDoDTUWfZv5apPYl_8aFHqU3EA/exec?book=1&k=QGcFN6DZwxMS"></iframe>
+  src="https://script.google.com/macros/s/AKfycbyTUlWj4h4FTWj-pETwEYWWN9O5DXg2nvfZ3KRC4IcPMDoDTUWfZv5apPYl_8aFHqU3EA/exec?go="></iframe>
 <script>
-  // bookings.mallmusicinc.com/<artist> pre-selects that artist: the path is a name slug
-  // (djchad95), resolved by the form itself, so a new artist needs nothing deployed here.
-  // ?artist=<id or slug> still works. Old Short.io paths that match no artist show the full list.
+  // bookings.mallmusicinc.com/<slug>: the app resolves it. An artist's portal link name opens
+  // their login; an artist name (djchad95) opens the booking form for that artist; the root
+  // opens the booking form. No token lives on this page, the app mints them.
   var seg = decodeURIComponent(location.pathname.split('/').filter(Boolean)[0] || '');
   var a = new URLSearchParams(location.search).get('artist') || seg;
-  if (a && /^[\w-]{1,40}$/.test(a) && !/^(index|404)(\.html)?$/i.test(a)) document.getElementById('app').src += '&artist=' + encodeURIComponent(a);
+  if (!/^[\w-]{1,40}$/.test(a) || /^(index|404)(\.html)?$/i.test(a)) a = '';
+  document.getElementById('app').src += encodeURIComponent(a);
 </script>
-<noscript><a href="https://script.google.com/macros/s/AKfycbyTUlWj4h4FTWj-pETwEYWWN9O5DXg2nvfZ3KRC4IcPMDoDTUWfZv5apPYl_8aFHqU3EA/exec?book=1&k=QGcFN6DZwxMS">Open the booking form</a></noscript>
+<noscript><a href="https://script.google.com/macros/s/AKfycbyTUlWj4h4FTWj-pETwEYWWN9O5DXg2nvfZ3KRC4IcPMDoDTUWfZv5apPYl_8aFHqU3EA/exec?go=">Open the booking form</a></noscript>
 </body>
 </html>
